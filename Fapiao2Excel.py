@@ -11,7 +11,7 @@ import pandas as pd
 import re
 import sys
 import argparse
-from pprint import pprint
+# from pprint import pprint
 
 
 __author__ = 'linwenchao'
@@ -190,7 +190,6 @@ class Extractor(object):
     def _split_words_into_diff_line(self, groups):
         groups2 = {}
         for k, g in groups.items():
-            print(g)
             words = self._find_text_by_same_line(g, 3)
             groups2[k] = words
         return groups2
