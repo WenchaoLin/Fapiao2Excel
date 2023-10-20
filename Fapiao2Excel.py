@@ -240,7 +240,7 @@ class Extractor(object):
             b = items[0] if items and len(items) > 0 else ''
             s = items[1] if items and len(items) > 1 else ''
             df.loc[0, '价税合计(大写)'] = b
-            df.loc[0, '价税合计(小写)'] = s[1:]
+            df.loc[0, '价税合计(小写)'] = float(s[1:])
 
         return df, free_zone_flag
 
@@ -287,8 +287,9 @@ def main():
     
     files_path = Extractor('').load_files(IN_PATH)
     num = len(files_path)
-
+    print(f'{"_" * 50}')
     print(f'Total {num} PDF file(s) to parse.' )
+    print(f'{"_" * 50}')
     data = pd.DataFrame()
     skipped = 0
     
@@ -302,11 +303,15 @@ def main():
         except Exception as e:
             skipped += 1
             print('File error:', file_path, '\tSkip...\n')
-    
-    print(f'{"*"*50}\nFinish parsing, save data to {OUT_PATH}')
+    print(f'{"_" * 50}')
+    print(f'Finish parsing, save data to {OUT_PATH}')
     data.to_excel(OUT_PATH, sheet_name='发票')
-
-    print(f'{"*" * 50}\nJOB DONE. ({num - skipped}/{num} Extracted!) ')
+    # 计算最后一列的和
+    last_column_sum = data.iloc[:, -1].sum()
+    print(f'{"_" * 50}')
+    print(f'JOB DONE. ({num - skipped}/{num} Extracted!)'.rjust(50))
+    print(f'{"_"*20}'.rjust(50))
+    print(f'Total Amount: {last_column_sum:.2f}'.rjust(50))
 
 if __name__ == '__main__':
     main()
